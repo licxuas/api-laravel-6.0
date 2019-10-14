@@ -16,3 +16,25 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1', [
+    'namespace' => 'App\Http\Controllers\Api\V1',
+    'middleware' => ['cors', 'serializer:array', 'bindings']
+], function($api) {
+
+    $api->group([
+        'middleware' => 'api.throttle',
+        'limit' => config('api.rate_limits.sign.limit'),
+        'expires' => config('api.rate_limits.sign.expires'),
+    ], function($api) {
+        $api->post('verificationCodes', 'VerificationCodesController@store')->name('api.verificationCodes.store');      //发送验证码
+        $api->post('authorizations', 'AuthorizationsController@store')->name('api.authorizations.store');               //用户登录
+    });
+
+});
+
+$api->version('v2', function ($api) {
+
+});
