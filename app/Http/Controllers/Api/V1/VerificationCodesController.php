@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\Controller;
-use App\Http\Requests\Api\V1\VerificationCodeRequest;
+use App\Http\Requests\Api\V1\VerificationCodesRequest;
+use Illuminate\Support\Str;
 use Overtrue\EasySms\EasySms;
 
 class VerificationCodesController extends Controller
 {
-    public function store(VerificationCodeRequest $request, EasySms $easySms) {
+    public function store(VerificationCodesRequest $request, EasySms $easySms) {
         $mobile = $request->mobile;
         $template = $this->getTemplate($request->type);
         if (!app()->environment('production')) {
@@ -28,7 +29,7 @@ class VerificationCodesController extends Controller
             }
         }
 
-        $key = 'verificationCode_'.str_random(15);
+        $key = 'verificationCode_'. Str::random(15);
         $expiredAt = now()->addMinutes(10);
         // 缓存验证码 10分钟过期。
         \Cache::put($key, ['mobile' => $mobile, 'code' => $code], $expiredAt);
