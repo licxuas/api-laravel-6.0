@@ -29,7 +29,7 @@ class VerificationCodesController extends Controller
             }
         }
 
-        $key = 'verificationCode_'. Str::random(15);
+        $key = 'verificationCode_'. str_random(15);
         $expiredAt = now()->addMinutes(10);
         // 缓存验证码 10分钟过期。
         \Cache::put($key, ['mobile' => $mobile, 'code' => $code], $expiredAt);
