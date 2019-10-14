@@ -31,10 +31,15 @@ $api->version('v1', [
     ], function($api) {
         $api->post('verificationCodes', 'VerificationCodesController@store')->name('api.verificationCodes.store');      //发送验证码
         $api->post('authorizations', 'AuthorizationsController@store')->name('api.authorizations.store');               //用户登录
+        $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@socialStore')->name('api.socials.authorizations.store');   //第三方登录
     });
 
 });
 
-$api->version('v2', function ($api) {
+
+$api->version('v2', [
+    'namespace' => 'App\Http\Controllers\Api\V2',
+    'middleware' => ['cors', 'serializer:array', 'bindings']
+], function($api) {
 
 });

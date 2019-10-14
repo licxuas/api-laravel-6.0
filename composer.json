@@ -16,7 +16,8 @@
         "laravel/helpers": "^1.1",
         "laravel/tinker": "^1.0",
         "liyu/dingo-serializer-switch": "^0.3.1",
-        "overtrue/easy-sms": "^1.1"
+        "overtrue/easy-sms": "^1.1",
+        "tymon/jwt-auth": "1.0.0-rc.5"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
