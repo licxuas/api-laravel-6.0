@@ -29,11 +29,25 @@ $api->version('v1', [
         'limit' => config('api.rate_limits.sign.limit'),
         'expires' => config('api.rate_limits.sign.expires'),
     ], function($api) {
-        $api->post('verificationCodes', 'VerificationCodesController@store')->name('api.verificationCodes.store');      //发送验证码
-        $api->post('authorizations', 'AuthorizationsController@store')->name('api.authorizations.store');               //用户登录
-        $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@socialStore')->name('api.socials.authorizations.store');   //第三方登录
+        $api->post('verificationCodes', 'VerificationCodesController@store')->name('verificationCodes.store');      //发送验证码
+        $api->post('authorizations', 'AuthorizationsController@store')->name('authorizations.store');               //用户登录
+        $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@socialStore')->name('socials.authorizations.store');   //第三方登录
     });
 
+
+    $api->group([
+        'middleware' => 'api.throttle',
+        'limit' => config('api.rate_limits.access.limit'),
+        'expires' => config('api.rate_limits.access.expires'),
+    ], function ($api) {
+
+
+        $api->group(['middleware' => ['token.canrefresh']], function ($api) {
+
+            $api->get('me', 'UserCentersController@index')->name('userCenters.me');     //我的个人信息
+
+        });
+    });
 });
 
 
